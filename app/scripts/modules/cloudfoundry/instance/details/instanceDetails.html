@@ -63,9 +63,19 @@
           <account-tag account="instance.account" pad="right"></account-tag>
           {{instance.availabilityZone || '(Unknown)'}}
         </dd>
-        <dt>Type</dt>
         <dt ng-if="instance.serverGroup">Server Group</dt>
         <dd ng-if="instance.serverGroup">{{instance.serverGroup}}</dd>
+      </dl>
+    </collapsible-section>
+    <collapsible-section heading="Size" expanded="true">
+      <dl class="dl-horizontal"
+          ng-class="InsightFilterStateModel.filtersExpanded ? 'dl-narrow' : 'dl-wide'">
+        <dt>CPU</dt>
+        <dd>{{(instance.nativeInstance.cpu * 100.0).toFixed(2) }}%</dd>
+        <dt>Memory Limit</dt>
+        <dd>{{instance.nativeInstance.memoryQuota / 1024 / 1024}}GB</dd>
+        <dt>Disk Limit</dt>
+        <dd>{{instance.nativeInstance.diskQuota / 1024 / 1024}}GB</dd>
       </dl>
     </collapsible-section>
     <collapsible-section heading="Status" expanded="true">
@@ -76,7 +86,7 @@
         <span class="glyphicon glyphicon-Starting-triangle"></span> <strong>Starting</strong>
       </p>
 
-      <dl class="dl-horizontal" ng-class="InsightFilterStateModel.filtersExpanded ? '': 'dl-horizontal'">
+      <dl class="dl-horizontal" ng-class="InsightFilterStateModel.filtersExpanded ? 'dl-narrow': 'dl-horizontal'">
         <dt ng-repeat-start="metric in healthMetrics | orderBy: 'type'">{{metric.type | robotToHuman}}</dt>
         <dd ng-repeat-end>
           <div ng-if="metric.type !== 'LoadBalancer'">
@@ -101,14 +111,16 @@
         <p>Could not find the instance. No other details provided.</p>
       </div>
     </div>
-    <collapsible-section heading="DNS" ng-if="!instance.notFound">
+    <collapsible-section heading="Public URL" ng-if="!instance.notFound">
       <dl ng-class="InsightFilterStateModel.filtersExpanded ? '' : 'dl-horizontal'">
-        <dt ng-if="instance.internalDnsName">Internal DNS Name</dt>
-        <dd ng-if="instance.internalDnsName"><a href="http://{{instance.internalDnsName}}" target="_blank">{{instance.internalDnsName}}</a></dd>
-        <dt ng-if="instance.internalIpAddress">Internal IP Address</dt>
-        <dd ng-if="instance.internalIpAddress"><a href="http://{{instance.internalIpAddress}}" target="_blank">{{instance.internalIpAddress}}</a></dd>
-        <dt ng-if="instance.externalIpAddress">External IP Address</dt>
-        <dd ng-if="instance.externalIpAddress"><a href="http://{{instance.externalIpAddress}}" target="_blank">{{instance.externalIpAddress}}</a></dd>
+        <dd ng-if="instance.loadBalancers" ng-repeat="loadBalancer in instance.loadBalancers">
+          <a href="http://{{loadBalancer.name}}.{{loadBalancer.domain}}" target="_blank">{{loadBalancer.name}}</a>
+          <copy-to-clipboard
+                  class="copy-to-clipboard copy-to-clipboard-sm"
+                  text="http://{{loadBalancer.name}}.{{loadBalancer.domain}}"
+                  tool-tip="Copy Public URL to clipboard">
+          </copy-to-clipboard>
+        </dd>
       </dl>
     </collapsible-section>
     <collapsible-section ng-if="!instance.notFound" heading="Security Groups">

@@ -111,7 +111,7 @@ module.exports = angular.module('spinnaker.cf.serverGroupCommandBuilder.service'
         freeFormDetails: serverGroupName.freeFormDetails,
         credentials: serverGroup.account,
         loadBalancers: serverGroup.loadBalancers,
-        services: serverGroup.services,
+        services: serverGroup.services.map(service => service.name),
         envs: serverGroup.envs,
         securityGroups: serverGroup.securityGroups,
         region: serverGroup.region,

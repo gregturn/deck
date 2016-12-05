@@ -59,11 +59,10 @@ module.exports = angular.module('spinnaker.instance.detail.cf.controller', [
 
     function retrieveInstance() {
       var extraData = {};
-      var instanceSummary, loadBalancers, account, region, vpcId;
+      var instanceSummary, account, region, vpcId;
       if (!app.serverGroups) {
         // standalone instance
         instanceSummary = {};
-        loadBalancers = [];
         account = instance.account;
         region = instance.region;
       } else {
@@ -71,7 +70,6 @@ module.exports = angular.module('spinnaker.instance.detail.cf.controller', [
           return serverGroup.instances.some(function (possibleInstance) {
             if (possibleInstance.id === instance.instanceId) {
               instanceSummary = possibleInstance;
-              loadBalancers = serverGroup.loadBalancers;
               account = serverGroup.account;
               region = serverGroup.region;
               extraData.serverGroup = serverGroup.name;
@@ -85,7 +83,6 @@ module.exports = angular.module('spinnaker.instance.detail.cf.controller', [
             return loadBalancer.instances.some(function (possibleInstance) {
               if (possibleInstance.id === instance.instanceId) {
                 instanceSummary = possibleInstance;
-                loadBalancers = [loadBalancer.name];
                 account = loadBalancer.account;
                 region = loadBalancer.region;
                 vpcId = loadBalancer.vpcId;
@@ -103,7 +100,6 @@ module.exports = angular.module('spinnaker.instance.detail.cf.controller', [
                 return serverGroup.instances.some(function (possibleInstance) {
                   if (possibleInstance.id === instance.instanceId) {
                     instanceSummary = possibleInstance;
-                    loadBalancers = [loadBalancer.name];
                     account = loadBalancer.account;
                     region = loadBalancer.region;
                     vpcId = loadBalancer.vpcId;
@@ -128,12 +124,8 @@ module.exports = angular.module('spinnaker.instance.detail.cf.controller', [
           $scope.instance.account = account;
           $scope.instance.region = region;
           $scope.instance.vpcId = vpcId;
-          $scope.instance.loadBalancers = loadBalancers;
+          $scope.instance.loadBalancers = details.loadBalancers;
           $scope.baseIpAddress = details.publicDnsName || details.privateIpAddress;
-
-          $scope.instance.internalDnsName = $scope.instance.instanceId;
-
-          // TODO Add link to CF console outputs
         },
           autoClose
         );

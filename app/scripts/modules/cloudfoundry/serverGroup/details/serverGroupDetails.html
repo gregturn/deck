@@ -98,7 +98,7 @@
     <collapsible-section heading="Server Group Information" expanded="true">
       <dl class="dl-horizontal" ng-class="InsightFilterStateModel.filtersExpanded ? 'dl-narrow' : 'dl-wide'">
         <dt>Created</dt>
-        <dd>{{serverGroup.launchConfig.createdTime | timestamp}}</dd>
+        <dd>{{serverGroup.createdTime | timestamp}}</dd>
         <dt>In</dt>
         <dd>
           <account-tag account="serverGroup.account" pad="right"></account-tag>
@@ -130,27 +130,16 @@
           ng-if="serverGroup">
         <dt>Instances</dt>
         <dd>
-          <health-counts container="serverGroup" class="pull-left"></health-counts>
+          <health-counts container="serverGroup.instanceCounts" class="pull-left"></health-counts>
         </dd>
       </dl>
     </collapsible-section>
     <collapsible-section heading="Services">
       <ul>
         <li ng-repeat="service in serverGroup.services">
-            {{service.name}} ({{service.nativeService.label}})
+            <a href="{{service.nativeService.dashboardUrl}}" target="_blank">{{service.name}}</a> ({{service.nativeService.service}})
         </li>
       </ul>
-    </collapsible-section>
-    <collapsible-section heading="Launch Configuration">
-      <dl ng-class="InsightFilterStateModel.filtersExpanded ? '' : 'dl-horizontal dl-wide'">
-        <dt>Name</dt>
-        <dd>{{serverGroup.launchConfig.launchConfigurationName}}</dd>
-        <dt>User Data</dt>
-        <dd ng-if="serverGroup.launchConfig.userData"><a href ng-click="ctrl.showUserData()">Show User Data</a></dd>
-        <dd ng-if="!serverGroup.launchConfig.userData">[none]</dd>
-        <dt>Network</dt>
-        <dd>{{ctrl.getNetwork()}}</dd>
-      </dl>
     </collapsible-section>
     <collapsible-section heading="Security Groups">
       <ul>
@@ -169,7 +158,7 @@
     </collapsible-section>
     <collapsible-section heading="Environment Variables" expanded="true">
       <dl class="dl-horizontal" ng-class="InsightFilterStateModel.filtersExpanded ? 'dl-narrow' : 'dl-wide'">
-        <div ng-repeat="(key, value) in serverGroup.envVariables">
+        <div ng-repeat="(key, value) in serverGroup.environments.userProvided">
           <!-- env variables starting with 'SPINNAKER' are part of Spinnaker and not for user consumption -->
           <div ng-if="!key.startsWith('SPINNAKER')">
             <dt>{{key}}</dt>

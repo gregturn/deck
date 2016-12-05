@@ -259,15 +259,6 @@ module.exports = angular.module('spinnaker.serverGroup.details.cf.controller', [
         });
       };
 
-      this.showUserData = function showScalingActivities() {
-        $scope.userData = window.atob($scope.serverGroup.launchConfig.userData);
-        $uibModal.open({
-          templateUrl: require('core/serverGroup/details/userData.html'),
-          controller: 'CloseableModalCtrl',
-          scope: $scope
-        });
-      };
-
       this.truncateCommitHash = function() {
         if ($scope.serverGroup && $scope.serverGroup.buildInfo && $scope.serverGroup.buildInfo.commit) {
           return $scope.serverGroup.buildInfo.commit.substring(0, 8);

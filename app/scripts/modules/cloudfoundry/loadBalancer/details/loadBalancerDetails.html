@@ -65,15 +65,17 @@
           </ul>
         </dd>
       </dl>
-      <dl>
-        <dt ng-if="loadBalancer.elb.dnsname">DNS Name</dt>
+      <dl ng-class="InsightFilterStateModel.filtersExpanded ? '' : 'dl-horizontal dl-wide'">
+        <dt ng-if="loadBalancer.name">Public-facing URL</dt>
         <dd>
-          <a target=_blank href="http://{{loadBalancer.elb.nativeRoute.name}}">{{loadBalancer.elb.name}}</a>
-          <copy-to-clipboard
-              class="copy-to-clipboard copy-to-clipboard-sm"
-              text="http://{{loadBalancer.elb.dnsname}}"
-              tool-tip="Copy DNS Name to clipboard">
-          </copy-to-clipboard>
+          <div ng-style="{'margin-left': InsightFilterStateModel.filtersExpanded ? '30px' : 0}">
+            <a target=_blank href="http://{{loadBalancer.name}}.{{loadBalancer.domain}}">{{loadBalancer.name}}</a>
+            <copy-to-clipboard
+                class="copy-to-clipboard copy-to-clipboard-sm"
+                text="http://{{loadBalancer.name}}.{{loadBalancer.domain}}"
+                tool-tip="Copy Public URL to clipboard">
+            </copy-to-clipboard>
+          </div>
         </dd>
       </dl>
     </collapsible-section>

@@ -19,6 +19,8 @@ apply plugin: 'spinnaker.project'
 apply plugin: 'nebula.ospackage'
 apply plugin: 'com.moowork.node'
 apply plugin: 'java'
+apply from: "${rootProject.projectDir}/publish-maven.gradle"
+
 
 jar {
   dependsOn('webpack')
